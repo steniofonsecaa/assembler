@@ -18,6 +18,7 @@ Certifique-se de ter o SDK do .NET instalado em sua máquina.
 Abra o terminal na raiz do projeto e execute:
 ```bash
 dotnet build
+```
 
 **2. Para executar o tradutor:**
 Execute o programa passando o caminho do arquivo .asm como argumento:
