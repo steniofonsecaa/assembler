@@ -28,4 +28,4 @@ dotnet run -- caminho/para/o/arquivo.asm
 
 ## 📌 Justificativa da Escolha da Linguagem
 
-A escolha do C# se deu pela sua forte tipagem e excelente suporte à orientação a objetos. Isso facilitou a implementação da arquitetura modular sugerida pelo livro (separando as responsabilidades em ```Parser ```, ```Code``` e ```SymbolTable```), além de oferecer manipulação nativa de strings e arquivos de forma muito eficiente, o que é o núcleo do funcionamento de um Assembler.
+A escolha do C# se deu pela sua forte tipagem e excelente suporte à orientação a objetos. Isso facilitou a implementação da arquitetura modular sugerida pelo livro (separando as responsabilidades em ```Parser```, ```Code``` e ```SymbolTable```), além de oferecer manipulação nativa de strings e arquivos de forma muito eficiente, o que é o núcleo do funcionamento de um Assembler.
