@@ -40,7 +40,7 @@ class Program
             parserPass1.Advance();
             var type = parserPass1.InstructionType();
 
-            if (type == InstructionType.LABEL)
+            if (type == CommandType.LABEL)
             {
                 string symbol = parserPass1.Symbol();
                 // Associa o nome do rótulo ao endereço da PRÓXIMA instrução na ROM
@@ -64,7 +64,7 @@ class Program
             parserPass2.Advance();
             var type = parserPass2.InstructionType();
 
-            if (type == InstructionType.A_INSTRUCTION)
+            if (type == CommandType.A_INSTRUCTION)
             {
                 string symbol = parserPass2.Symbol();
                 int address;
@@ -88,7 +88,7 @@ class Program
                 string binaryAddress = Convert.ToString(address, 2).PadLeft(15, '0');
                 writer.WriteLine("0" + binaryAddress);
             }
-            else if (type == InstructionType.C_INSTRUCTION)
+            else if (type == CommandType.C_INSTRUCTION)
             {
                 string dest = parserPass2.Dest();
                 string comp = parserPass2.Comp();

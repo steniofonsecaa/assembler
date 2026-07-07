@@ -6,14 +6,14 @@ using System.Linq;
 namespace Assembler.Parser;
 
 /// Define os tipos de instrução da arquitetura Hack.
-public enum InstructionType
+public enum CommandType
 {
     A_INSTRUCTION,
     C_INSTRUCTION,
     LABEL
 }
 
-/// Le o arquivo fonte .asm, remove espaços e comentários e isola casa compomente das instruções
+/// Lê o arquivo fonte .asm, remove espaços e comentários e isola cada componente das instruções
 public class Parser
 {
     private readonly List<string> _lines;
@@ -27,7 +27,6 @@ public class Parser
             throw new FileNotFoundException($"Arquivo fonte não encontrado: {filename}");
         }
 
-        // Lê todas as linhas, remove comentários/espaços e descarta linhas vazias
         _lines = File.ReadLines(filename)
             .Select(CleanLine)
             .Where(line => !string.IsNullOrEmpty(line))
@@ -36,7 +35,6 @@ public class Parser
         _currentIndex = 0;
     }
 
-    /// Remove comentários de linha (//) e todos os espaços em branco ou quebras.
     private static string CleanLine(string line)
     {
         int commentIndex = line.IndexOf("//");
@@ -67,19 +65,19 @@ public class Parser
         _currentIndex++;
     }
 
-    public InstructionType InstructionType()
+    public CommandType InstructionType()
     {
         if (_currentLine.StartsWith('@'))
         {
-            return InstructionType.A_INSTRUCTION;
+            return CommandType.A_INSTRUCTION;
         }
         
         if (_currentLine.StartsWith('(') && _currentLine.EndsWith(')'))
         {
-            return InstructionType.LABEL;
+            return CommandType.LABEL;
         }
         
-        return InstructionType.C_INSTRUCTION;
+        return CommandType.C_INSTRUCTION;
     }
 
     public string Symbol()
@@ -88,15 +86,15 @@ public class Parser
         
         return type switch
         {
-            InstructionType.A_INSTRUCTION => _currentLine[1..],       // Remove o '@'
-            InstructionType.LABEL         => _currentLine[1..^1],     // Remove '(' e ')'
+            CommandType.A_INSTRUCTION => _currentLine[1..],       
+            CommandType.LABEL         => _currentLine[1..^1],     
             _ => throw new InvalidOperationException("Symbol só pode ser chamado para instruções A ou LABEL.")
         };
     }
 
     public string Dest()
     {
-        if (InstructionType() != InstructionType.C_INSTRUCTION)
+        if (InstructionType() != CommandType.C_INSTRUCTION)
         {
             throw new InvalidOperationException("Dest só é válido para instruções do tipo C.");
         }
@@ -111,20 +109,18 @@ public class Parser
 
     public string Comp()
     {
-        if (InstructionType() != InstructionType.C_INSTRUCTION)
+        if (InstructionType() != CommandType.C_INSTRUCTION)
         {
             throw new InvalidOperationException("Comp só é válido para instruções do tipo C.");
         }
 
         string remaining = _currentLine;
 
-        // Isola a parte após o '=' se houver destino
         if (remaining.Contains('='))
         {
             remaining = remaining.Split('=')[1];
         }
 
-        // Isola a parte antes do ';' se houver jump
         if (remaining.Contains(';'))
         {
             remaining = remaining.Split(';')[0];
@@ -135,7 +131,7 @@ public class Parser
 
     public string Jump()
     {
-        if (InstructionType() != InstructionType.C_INSTRUCTION)
+        if (InstructionType() != CommandType.C_INSTRUCTION)
         {
             throw new InvalidOperationException("Jump só é válido para instruções do tipo C.");
         }
